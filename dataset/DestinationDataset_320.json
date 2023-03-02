@@ -1,0 +1,23 @@
+{
+	"name": "DestinationDataset_320",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakesink",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "output.csv",
+				"fileSystem": "outputcont"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}
