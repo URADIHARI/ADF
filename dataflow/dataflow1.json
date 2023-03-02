@@ -1,0 +1,94 @@
+{
+	"name": "dataflow1",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DelimitedText1",
+						"type": "DatasetReference"
+					},
+					"name": "source"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "outputdata",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				},
+				{
+					"dataset": {
+						"referenceName": "outputdata2",
+						"type": "DatasetReference"
+					},
+					"name": "sink2"
+				}
+			],
+			"transformations": [
+				{
+					"name": "split"
+				},
+				{
+					"name": "filter1"
+				},
+				{
+					"name": "filter2"
+				},
+				{
+					"name": "aggregate1"
+				},
+				{
+					"name": "aggregate2"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          CustomerID as string,",
+				"          City as string,",
+				"          NoOfChildren as string,",
+				"          MinAgeOfChild as string,",
+				"          MaxAgeOfChild as string,",
+				"          Tenure as string,",
+				"          FrquncyOfPurchase as string,",
+				"          NoOfUnitsPurchased as string,",
+				"          FrequencyOFPlay as string,",
+				"          NoOfGamesPlayed as string,",
+				"          NoOfGamesBought as string,",
+				"          FavoriteChannelOfTransaction as string,",
+				"          FavoriteGame as string,",
+				"          TotalRevenueGenerated as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source",
+				"source split(equals(City,\"1\"),",
+				"     equals(City,\"2\"),",
+				"     disjoint: false) ~> split@(city1, city2, othercities)",
+				"split@city1 filter(toInteger(NoOfChildren) <= 5) ~> filter1",
+				"split@city2 filter(toInteger(NoOfChildren) <= 5) ~> filter2",
+				"filter1 aggregate(groupBy(NoOfChildren),",
+				"     Total_Revenue_NoOfChildren = sum(toInteger(TotalRevenueGenerated))) ~> aggregate1",
+				"filter2 aggregate(groupBy(NoOfChildren),",
+				"     Total_Revenue_no_children = sum(toInteger(TotalRevenueGenerated))) ~> aggregate2",
+				"aggregate1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink1",
+				"aggregate2 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink2"
+			]
+		}
+	}
+}
