@@ -1,0 +1,9 @@
+{
+	"name": "insofedf",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "00abf0f4-aa64-457a-a508-d278942533ea",
+		"tenantId": "5d0312cd-2716-4f43-b4cf-da7a84067bd6"
+	}
+}
